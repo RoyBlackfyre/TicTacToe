@@ -160,7 +160,7 @@ function GameController (
                 if (turn>4){
                     if(checkBoard()){
                         board.printBoard()
-                        console.log(`${activePlayer.name} won!`)
+                        alert(`${activePlayer.name} won!`)
                         matchFinished=true;
                         for(let i=0; i<grid.children.length;i++){
                             grid.children[i].removeEventListener("click",jugar)
