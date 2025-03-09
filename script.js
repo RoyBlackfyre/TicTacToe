@@ -103,21 +103,23 @@ function GameController (
     {     
         for(let i=0; i<3;i++){
             //Check for horizontal win condition
-            if(board.getCellValue(i,0)==board.getCellValue(i,1) && board.getCellValue(i,0)==board.getCellValue(i,2)){
+            if(board.getCellValue(i,0)==board.getCellValue(i,1) && board.getCellValue(i,0)==board.getCellValue(i,2) && board.getCellValue(i,0)){
                 return true
             }
             //Check for vertical win condition
-            if(board.getCellValue(0,i)==board.getCellValue(1,i) && board.getCellValue(2,i)==board.getCellValue(0,i)){
+            if(board.getCellValue(0,i)==board.getCellValue(1,i) && board.getCellValue(2,i)==board.getCellValue(0,i) && board.getCellValue(0,i)){
+                console.log("condicion vertical")
                 return true
             }
         }
 
         //Check diagonal win conditions
-        if(board.getCellValue(1,1) == board.getCellValue(0,0) && board.getCellValue(1,1) == board.getCellValue(2,2)){
+        if(board.getCellValue(1,1) == board.getCellValue(0,0) && board.getCellValue(1,1) == board.getCellValue(2,2) && board.getCellValue(1,1)){
+            console.log("condicion diagonal 1")
             return true
         }
 
-        return (board.getCellValue(1,1) == board.getCellValue(0,2) && board.getCellValue(1,1) == board.getCellValue(2,0))
+        return (board.getCellValue(1,1) == board.getCellValue(0,2) && board.getCellValue(1,1) == board.getCellValue(2,0) && board.getCellValue(1,1))
         
     }
     //Al seleccionar celda, se modifica, si no se modifica por que ya fue elegida
