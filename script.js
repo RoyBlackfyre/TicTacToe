@@ -6,6 +6,7 @@ for(let i=0; i<grid.children.length;i++){
     grid.children[i].addEventListener("click",()=>{
         const row = grid.children[i].getAttribute("data-row")
         const column = grid.children[i].getAttribute("data-column")
+        grid.children[i].innerText = juego.getActivePlayer().token
         juego.playRound(row,column)
         
     })

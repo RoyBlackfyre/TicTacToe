@@ -12,4 +12,9 @@
     height: 50vh;
     width:50vw;
     grid-template-columns: repeat(3,1fr);
+    border: 1em solid black;
+}
+
+.game-grid{
+    border:.5em solid black
 }
