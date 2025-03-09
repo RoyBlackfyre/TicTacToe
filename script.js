@@ -1,4 +1,16 @@
+const grid = document.querySelector(".board")
+const newGame = document.querySelector(".newGame")
+const juego=GameController()
 
+for(let i=0; i<grid.children.length;i++){
+    grid.children[i].addEventListener("click",()=>{
+        const row = grid.children[i].getAttribute("data-row")
+        const column = grid.children[i].getAttribute("data-column")
+        juego.playRound(row,column)
+        
+    })
+    
+}
 
 //Closure para crear tablero, devolverlo, mostrarlo y modificar casillas
 function Gameboard() {
@@ -154,7 +166,8 @@ function GameController (
     }
 
     return {
-        playRound
+        playRound,
+        getActivePlayer
     }
 }
 

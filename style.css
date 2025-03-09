@@ -1,0 +1,15 @@
+
+.gameContainer{
+    display:flex;
+    min-height: 100vh;
+    min-width: 100vw;
+    justify-content: center;
+    align-items: center;
+}
+
+.board{
+    display:grid;
+    height: 50vh;
+    width:50vw;
+    grid-template-columns: repeat(3,1fr);
+}
