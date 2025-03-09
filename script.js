@@ -1,23 +1,28 @@
 const grid = document.querySelector(".board")
 const newGame = document.querySelector(".newGame")
-let juego=GameController()
+let juego = {}
 
-newGame.addEventListener("click",()=>{
+newGame.addEventListener("click", ()=>{
     juego=GameController()
-    console.log("hola")
     for(let i=0; i<grid.children.length;i++){
         grid.children[i].innerText = ''
     }
 })
 
+//Con esta funcion se muestra el token del jugador en el board, y se elige
+//la celda.
+//Se declara la funcion fuera del evento, para poder remover el evento una
+//vez algun jugador alla ganado.
+
+function jugar(){
+    const row = this.getAttribute("data-row")
+    const column = this.getAttribute("data-column")
+    this.innerText = juego.getActivePlayer().token
+    juego.playRound(row,column)
+}
+
 for(let i=0; i<grid.children.length;i++){
-    grid.children[i].addEventListener("click",()=>{
-        const row = grid.children[i].getAttribute("data-row")
-        const column = grid.children[i].getAttribute("data-column")
-        grid.children[i].innerText = juego.getActivePlayer().token
-        juego.playRound(row,column)
-        
-    })
+    grid.children[i].addEventListener("click",jugar)
     
 }
 
@@ -157,6 +162,9 @@ function GameController (
                         board.printBoard()
                         console.log(`${activePlayer.name} won!`)
                         matchFinished=true;
+                        for(let i=0; i<grid.children.length;i++){
+                            grid.children[i].removeEventListener("click",jugar)
+                        }
                     } else {
                         switchPlayerTurn()
                         printNewRound()
@@ -166,9 +174,6 @@ function GameController (
                 printNewRound()
                 }
             }
-        }
-        else{
-            console.log("start a new game")
         }
     }
 
