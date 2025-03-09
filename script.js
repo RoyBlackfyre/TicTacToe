@@ -1,5 +1,6 @@
 
 
+//Closure para crear tablero, devolverlo, mostrarlo y modificar casillas
 function Gameboard() {
 
     const rows = 3;
@@ -20,16 +21,29 @@ function Gameboard() {
 
     function printBoard(){
         let boardState = board.map(row=>row.map(celda => celda.getValue()))
-        console.log(boardState)
+        console.table(boardState)
     }
 
-    function setValue(x,y,value){
-        board[x][y].addValue("Mierdeta")
+    //Se modifica el valor de la celda solo si no tiene token asignado
+    function setCellValue(row,column,token){
+        if(!board[row][column].getValue())
+        {
+            board[row][column].addValue(token)
+            return true
+        }
+        return false
+
     }
+
+    function getCellValue(row,column){
+        return board[row][column].getValue()
+    }
+
     return {
         getBoard,
         printBoard,
-        setValue
+        setCellValue,
+        getCellValue
     }
 }
 
@@ -48,6 +62,99 @@ function Cell(){
     }
 }
 
-function GameController (){
+function GameController (
+    playerOneName="Player One",
+    playerTwoName = "Player Two"
+){
 
+    //Se inicializan tableros y jugadores
+    const board = Gameboard();
+
+    let matchFinished = false;
+    
+    let turn = 1;
+
+    const players = [
+        {
+            name: playerOneName,
+            token: "x"
+        },
+        {
+            name: playerTwoName,
+            token: "o"
+        }
+    ]
+
+    let activePlayer = players[0]
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+        turn++
+      };
+
+    const getActivePlayer = () => activePlayer;
+
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${getActivePlayer().name}'s turn.`);
+      };
+
+    const checkBoard = () =>
+    {     
+        for(let i=0; i<3;i++){
+            //Check for horizontal win condition
+            if(board.getCellValue(i,0)==board.getCellValue(i,1) && board.getCellValue(i,0)==board.getCellValue(i,2)){
+                return true
+            }
+            //Check for vertical win condition
+            if(board.getCellValue(0,i)==board.getCellValue(1,i) && board.getCellValue(2,i)==board.getCellValue(0,i)){
+                return true
+            }
+        }
+
+        //Check diagonal win conditions
+        if(board.getCellValue(1,1) == board.getCellValue(0,0) && board.getCellValue(1,1) == board.getCellValue(2,2)){
+            return true
+        }
+
+        return (board.getCellValue(1,1) == board.getCellValue(0,2) && board.getCellValue(1,1) == board.getCellValue(2,0))
+        
+    }
+    //Al seleccionar celda, se modifica, si no se modifica por que ya fue elegida
+    //previamente, se revisa si jugador gano, si no, se cambia de turno.
+    const playRound = (row,column) => {
+        //If all cell have been selected and no one have won, the match is finished
+        if(turn==10){
+            matchFinished=true;
+        }
+
+        if(!matchFinished){
+            if(board.setCellValue(row,column,activePlayer.token)){
+                
+                if (turn>4){
+                    if(checkBoard()){
+                        board.printBoard()
+                        console.log(`${activePlayer.name} won!`)
+                        matchFinished=true;
+                    } else {
+                        switchPlayerTurn()
+                        printNewRound()
+                    }
+                } else{
+                switchPlayerTurn()
+                printNewRound()
+                }
+            }
+        }
+        else{
+            console.log("start a new game")
+        }
+    }
+
+    return {
+        playRound
+    }
 }
+
+
+
