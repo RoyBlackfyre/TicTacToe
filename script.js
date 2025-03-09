@@ -1,6 +1,14 @@
 const grid = document.querySelector(".board")
 const newGame = document.querySelector(".newGame")
-const juego=GameController()
+let juego=GameController()
+
+newGame.addEventListener("click",()=>{
+    juego=GameController()
+    console.log("hola")
+    for(let i=0; i<grid.children.length;i++){
+        grid.children[i].innerText = ''
+    }
+})
 
 for(let i=0; i<grid.children.length;i++){
     grid.children[i].addEventListener("click",()=>{
@@ -121,14 +129,12 @@ function GameController (
             }
             //Check for vertical win condition
             if(board.getCellValue(0,i)==board.getCellValue(1,i) && board.getCellValue(2,i)==board.getCellValue(0,i) && board.getCellValue(0,i)){
-                console.log("condicion vertical")
                 return true
             }
         }
 
         //Check diagonal win conditions
         if(board.getCellValue(1,1) == board.getCellValue(0,0) && board.getCellValue(1,1) == board.getCellValue(2,2) && board.getCellValue(1,1)){
-            console.log("condicion diagonal 1")
             return true
         }
 
