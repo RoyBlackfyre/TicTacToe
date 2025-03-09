@@ -1,11 +1,18 @@
 const grid = document.querySelector(".board")
 const newGame = document.querySelector(".newGame")
+const texto = document.querySelector(".texto")
 let juego = {}
 
 newGame.addEventListener("click", ()=>{
     juego=GameController()
     for(let i=0; i<grid.children.length;i++){
         grid.children[i].innerText = ''
+    }
+    texto.innerText="Player One turn"
+
+    for(let i=0; i<grid.children.length;i++){
+        grid.children[i].addEventListener("click",jugar)
+        
     }
 })
 
@@ -19,11 +26,7 @@ function jugar(){
     const column = this.getAttribute("data-column")
     this.innerText = juego.getActivePlayer().token
     juego.playRound(row,column)
-}
-
-for(let i=0; i<grid.children.length;i++){
-    grid.children[i].addEventListener("click",jugar)
-    
+    this.removeEventListener("click",jugar)
 }
 
 //Closure para crear tablero, devolverlo, mostrarlo y modificar casillas
@@ -116,6 +119,7 @@ function GameController (
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
         turn++
+        texto.innerText=`${activePlayer.name} turn`
       };
 
     const getActivePlayer = () => activePlayer;
@@ -150,9 +154,7 @@ function GameController (
     //previamente, se revisa si jugador gano, si no, se cambia de turno.
     const playRound = (row,column) => {
         //If all cell have been selected and no one have won, the match is finished
-        if(turn==10){
-            matchFinished=true;
-        }
+        
 
         if(!matchFinished){
             if(board.setCellValue(row,column,activePlayer.token)){
@@ -160,11 +162,11 @@ function GameController (
                 if (turn>4){
                     if(checkBoard()){
                         board.printBoard()
-                        alert(`${activePlayer.name} won!`)
                         matchFinished=true;
                         for(let i=0; i<grid.children.length;i++){
                             grid.children[i].removeEventListener("click",jugar)
                         }
+                        texto.innerText=`Congratulations ${activePlayer.name}`
                     } else {
                         switchPlayerTurn()
                         printNewRound()
@@ -175,6 +177,11 @@ function GameController (
                 }
             }
         }
+
+        if(turn==10 && !checkBoard()){
+            texto.innerText=`Tie!, push New Game button to start a new game`
+        }
+
     }
 
     return {
