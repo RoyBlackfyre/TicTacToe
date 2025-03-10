@@ -5,15 +5,12 @@ let juego = {}
 
 newGame.addEventListener("click", ()=>{
     juego=GameController()
-    for(let i=0; i<grid.children.length;i++){
-        grid.children[i].innerText = ''
-    }
+    const gridItems = Array.from(grid.children)
+    gridItems.forEach((cell)=>{
+        cell.innerText='';
+        cell.addEventListener("click",jugar)
+    })
     texto.innerText="Player One turn"
-
-    for(let i=0; i<grid.children.length;i++){
-        grid.children[i].addEventListener("click",jugar)
-        
-    }
 })
 
 //Con esta funcion se muestra el token del jugador en el board, y se elige
@@ -129,15 +126,36 @@ function GameController (
         console.log(`${getActivePlayer().name}'s turn.`);
       };
 
+      const winPatterns = [
+        // Rows
+        [[0, 0], [0, 1], [0, 2]],
+        [[1, 0], [1, 1], [1, 2]],
+        [[2, 0], [2, 1], [2, 2]],
+        // Columns
+        [[0, 0], [1, 0], [2, 0]],
+        [[0, 1], [1, 1], [2, 1]],
+        [[0, 2], [1, 2], [2, 2]]
+      ]
+
+    const isWinningCondition = (a,b,c) =>
+    {
+
+        return (a==b && a==c && a!=0)
+    }
     const checkBoard = () =>
     {     
-        for(let i=0; i<3;i++){
-            //Check for horizontal win condition
-            if(board.getCellValue(i,0)==board.getCellValue(i,1) && board.getCellValue(i,0)==board.getCellValue(i,2) && board.getCellValue(i,0)){
-                return true
-            }
-            //Check for vertical win condition
-            if(board.getCellValue(0,i)==board.getCellValue(1,i) && board.getCellValue(2,i)==board.getCellValue(0,i) && board.getCellValue(0,i)){
+        for (const pattern of winPatterns){
+            const [a,b,c] = pattern;
+            console.log(a,b,c)
+            if (isWinningCondition(
+                board.getCellValue(a[0],a[1]),
+                board.getCellValue(b[0],b[1]),
+                board.getCellValue(c[0],c[1])
+
+            )){
+                console.log(board.getCellValue(a[0],a[1]),
+                board.getCellValue(b[0],b[1]),
+                board.getCellValue(c[0],c[1]))
                 return true
             }
         }
